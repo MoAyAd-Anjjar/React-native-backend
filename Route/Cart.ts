@@ -4,8 +4,7 @@ import Database from "better-sqlite3";
 
 const router: Router = Router();
 const db = new Database("./Shop_Mobile_APP.db")
-if(db)
-  console.log("CONNECTING TO DB"+db);
+
   
 
 // Route to get user cart
