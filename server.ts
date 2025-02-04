@@ -1,10 +1,9 @@
 
 import dotenv from "dotenv";
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import UserRouter from "./Route/User"
 import UserProduct from "./Route/Item"
 import UserCart from "./Route/Cart"
-
 import cors from "cors";
 import bodyParser from "body-parser"
 dotenv.config();
@@ -21,7 +20,9 @@ app.use("/Cart",UserCart)
 
 
 const port = process.env.PORT || 8000
-
+app.get("/", (req, res) =>{
+  res.send("Welcome to ShopeApp Backend!")
+})
 app.listen(port, () => {
   console.log(`app listening on port ${port}`)
 });

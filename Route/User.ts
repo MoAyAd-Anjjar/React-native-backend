@@ -1,71 +1,48 @@
-import { log } from "console";
 import { Router, Request, Response } from "express";
-import sqlite3 from "sqlite3";
+import Database from "better-sqlite3";
 
 const router: Router = Router();
-const db = new sqlite3.Database('./Shop_Mobile_APP.db', (err) => {
-  if (err) {
-    console.error('Error opening database:', err.message);
-  } else {
-    console.log('Connected to the SQLite database.');
-  }
-});
+const db = new Database("./Shop_Mobile_APP.db");
 
 // Route to get users
-router.get("/GetUser", async (req: Request, res: Response) => {
-  const username = req.query.username;
-  const password = req.query.password;
-  const email = req.query.email;
-
+router.get("/GetUser", (req: Request, res: any) => {
+  const { username, password, email } = req.query;
 
   try {
-    const query = `SELECT * FROM Users  WHERE username=? AND email=? AND password=?`;
-
-    db.all(query, [username, email, password], (err, rows) => {
-      if (err) {
-        console.error("Error fetching users:", err.message);
-        res.status(500).send("An error occurred while fetching users");
-        return rows;
-      }
-
-      res.status(200).json(...rows);
+    const query = db.prepare(
+      "SELECT * FROM Users WHERE username = ? AND email = ? AND password = ?"
+    );
+    const users = query.all(username, email, password);
    
-      
-    });
+    
+    if (users.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(...users);
   } catch (error: any) {
     console.error("Error fetching users:", error.message);
-    res.status(500).send("An error occurred while fetching users");
+    res.status(500).json({ error: "An error occurred while fetching users" });
   }
 });
 
-router.get('/GetUserCart', (req:Request, res:Response) => {
-  const USER_NAME = req.query.USER_NAME;
-  const USER_ID = req.query.USER_ID;
-  
-  
+// Route to get user cart
+router.get("/GetUserCart", (req: Request, res: any) => {
+  const { USER_NAME, USER_ID } = req.query;
 
   try {
-    const query = `SELECT * FROM cart  WHERE username=? AND userid=?`;
+    const query = db.prepare("SELECT * FROM cart WHERE username = ? AND user_id = ?");
+    const cartItems = query.all(USER_NAME, USER_ID);
 
-    db.all(query, [USER_NAME, USER_ID], (err, rows) => {
-      if (err) {
-        console.error("Error fetching users:", err.message);
-        res.status(500).send("An error occurred while fetching users");
-       
-      }
-   
-      
-      res.status(200).json(...rows);
-    });
+    if (cartItems.length === 0) {
+      return res.status(404).json({ message: "No items found in the cart" });
+    }
+
+    res.status(200).json(cartItems);
   } catch (error: any) {
-    console.error("Error fetching users:", error.message);
-    res.status(500).send("An error occurred while fetching users");
+    console.error("Error fetching user cart:", error.message);
+    res.status(500).json({ error: "An error occurred while fetching user cart" });
   }
-
-})
-
-// Route to add a new user
-
-
+});
 
 export default router;

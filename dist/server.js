@@ -19,6 +19,9 @@ app.use("/User", User_1.default);
 app.use("/Product", Item_1.default);
 app.use("/Cart", Cart_1.default);
 const port = process.env.PORT || 8000;
+app.get("/", (req, res) => {
+    res.send("Welcome to ShopeApp Backend!");
+});
 app.listen(port, () => {
     console.log(`app listening on port ${port}`);
 });
