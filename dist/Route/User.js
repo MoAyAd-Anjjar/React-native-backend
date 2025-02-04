@@ -28,9 +28,8 @@ router.get("/GetUser", (req, res) => __awaiter(void 0, void 0, void 0, function*
     const username = req.query.username;
     const password = req.query.password;
     const email = req.query.email;
-    console.log(password, email, username);
     try {
-        const query = `SELECT * FROM Users  WHERE username=? OR email=? AND password=?`;
+        const query = `SELECT * FROM Users  WHERE username=? AND email=? AND password=?`;
         db.all(query, [username, email, password], (err, rows) => {
             if (err) {
                 console.error("Error fetching users:", err.message);
@@ -45,5 +44,23 @@ router.get("/GetUser", (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(500).send("An error occurred while fetching users");
     }
 }));
+router.get('/GetUserCart', (req, res) => {
+    const USER_NAME = req.query.USER_NAME;
+    const USER_ID = req.query.USER_ID;
+    try {
+        const query = `SELECT * FROM cart  WHERE username=? AND userid=?`;
+        db.all(query, [USER_NAME, USER_ID], (err, rows) => {
+            if (err) {
+                console.error("Error fetching users:", err.message);
+                res.status(500).send("An error occurred while fetching users");
+            }
+            res.status(200).json(...rows);
+        });
+    }
+    catch (error) {
+        console.error("Error fetching users:", error.message);
+        res.status(500).send("An error occurred while fetching users");
+    }
+});
 // Route to add a new user
 exports.default = router;

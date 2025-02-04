@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import express, { Express, Request, Response } from "express";
 import UserRouter from "./Route/User"
 import UserProduct from "./Route/Item"
-import sqlite3 from "sqlite3";
+import UserCart from "./Route/Cart"
+
 import cors from "cors";
 import bodyParser from "body-parser"
 dotenv.config();
@@ -15,10 +16,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/User",UserRouter)
 app.use("/Product",UserProduct)
+app.use("/Cart",UserCart)
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World From the Typescript Server!')
-});
+
 
 const port = process.env.PORT || 8000
 
