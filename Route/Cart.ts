@@ -1,10 +1,11 @@
 import { Router, Request, Response } from "express";
 import Database from "better-sqlite3";
-
+import { ICartType } from "../Types";
 
 const router: Router = Router();
 const db = new Database("./Shop_Mobile_APP.db")
-
+if(db)
+  console.log("CONNECTING TO DB"+db);
   
 
 // Route to get user cart
