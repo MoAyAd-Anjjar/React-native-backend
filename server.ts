@@ -4,7 +4,6 @@ import express, { Express } from "express";
 import UserRouter from "./Route/User"
 import UserProduct from "./Route/Item"
 
-import UserCart from "./Route/cart"
 import cors from "cors";
 import bodyParser from "body-parser"
 dotenv.config();
@@ -16,7 +15,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/User",UserRouter)
 app.use("/Product",UserProduct)
-app.use("/Cart",UserCart)
+
 
 
 
